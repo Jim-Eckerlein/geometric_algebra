@@ -107,6 +107,12 @@ impl Powf for pga3::Translator {
     }
 }
 
+impl pga3::Point {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self { g0: [x, y, z, 1.0].into() }
+    }
+}
+
 /// All elements set to `0.0`
 pub trait Zero {
     fn zero() -> Self;
