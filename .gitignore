@@ -2,3 +2,4 @@ target
 
 # Generated algebras
 src/*pga*d.*
+src/pga3.*
