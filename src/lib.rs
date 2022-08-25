@@ -115,7 +115,7 @@ impl pga3::Scalar {
 
 impl pga3::Point {
     pub fn new(x: f32, y: f32, z: f32) -> Self {
-        Self { g0: [1.0, x, y, z].into() }
+        Self { g0: [x, y, z, 1.0].into() }
     }
 }
 
