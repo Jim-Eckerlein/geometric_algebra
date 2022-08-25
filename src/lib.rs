@@ -264,3 +264,8 @@ pub trait Powf {
     type Output;
     fn powf(self, exponent: f32) -> Self::Output;
 }
+
+/// Extracts the square root of a number
+pub fn sqrt<T: Powf>(n: T) -> T::Output {
+    n.powf(0.5)
+}
