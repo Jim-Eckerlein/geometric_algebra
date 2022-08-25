@@ -1,4 +1,10 @@
-#![cfg_attr(all(any(target_arch = "arm", target_arch = "aarch64"), target_feature = "neon"), feature(stdsimd))]
+#![cfg_attr(
+    all(
+        any(target_arch = "arm", target_arch = "aarch64"),
+        target_feature = "neon"
+    ),
+    feature(stdsimd)
+)]
 
 pub mod pga3;
 pub mod simd;
@@ -10,12 +16,8 @@ impl Exp for pga3::Line {
         let det = self.g1[0] * self.g1[0] + self.g1[1] * self.g1[1] + self.g1[2] * self.g1[2];
         if det <= 0.0 {
             return pga3::Motor {
-                g0: simd::Simd32x4 {
-                    f32x4: [1.0, 0.0, 0.0, 0.0],
-                },
-                g1: simd::Simd32x4 {
-                    f32x4: [0.0, self.g0[0], self.g0[1], self.g0[2]],
-                },
+                g0: [1.0, 0.0, 0.0, 0.0].into(),
+                g1: [0.0, self.g0[0], self.g0[1], self.g0[2]].into(),
             };
         }
         let a = det.sqrt();
@@ -26,12 +28,8 @@ impl Exp for pga3::Line {
         let g0 = simd::Simd32x3::from(s) * self.g1;
         let g1 = simd::Simd32x3::from(s) * self.g0 + simd::Simd32x3::from(t) * self.g1;
         pga3::Motor {
-            g0: simd::Simd32x4 {
-                f32x4: [c, g0[0], g0[1], g0[2]],
-            },
-            g1: simd::Simd32x4 {
-                f32x4: [s * m, g1[0], g1[1], g1[2]],
-            },
+            g0: [c, g0[0], g0[1], g0[2]].into(),
+            g1: [s * m, g1[0], g1[1], g1[2]].into(),
         }
     }
 }
@@ -43,12 +41,8 @@ impl Ln for pga3::Motor {
         let det = 1.0 - self.g0[0] * self.g0[0];
         if det <= 0.0 {
             return pga3::Line {
-                g0: simd::Simd32x3 {
-                    f32x3: [self.g1[1], self.g1[2], self.g1[3]],
-                },
-                g1: simd::Simd32x3 {
-                    f32x3: [0.0, 0.0, 0.0],
-                },
+                g0: [self.g1[1], self.g1[2], self.g1[3]].into(),
+                g1: [0.0, 0.0, 0.0].into(),
             };
         }
         let a = 1.0 / det;
@@ -56,14 +50,10 @@ impl Ln for pga3::Motor {
         let c = a * self.g1[0] * (1.0 - self.g0[0] * b);
         let g0 = simd::Simd32x4::from(b) * self.g1 + simd::Simd32x4::from(c) * self.g0;
         let g1 = simd::Simd32x4::from(b) * self.g0;
-        return pga3::Line {
-            g0: simd::Simd32x3 {
-                f32x3: [g0[1], g0[2], g0[3]],
-            },
-            g1: simd::Simd32x3 {
-                f32x3: [g1[1], g1[2], g1[3]],
-            },
-        };
+        pga3::Line {
+            g0: [g0[1], g0[2], g0[3]].into(),
+            g1: [g1[1], g1[2], g1[3]].into(),
+        }
     }
 }
 
@@ -80,9 +70,7 @@ impl Exp for pga3::Branch {
 
     fn exp(self) -> pga3::Translator {
         pga3::Translator {
-            g0: simd::Simd32x4 {
-                f32x4: [1.0, self.g0[0], self.g0[1], self.g0[2]],
-            }
+            g0: [1.0, self.g0[0], self.g0[1], self.g0[2]].into(),
         }
     }
 }
@@ -92,9 +80,12 @@ impl Ln for pga3::Translator {
 
     fn ln(self) -> pga3::Branch {
         pga3::Branch {
-            g0: simd::Simd32x3 {
-                f32x3: [self.g0[1] / self.g0[0], self.g0[2] / self.g0[0], self.g0[3] / self.g0[0]],
-            }
+            g0: [
+                self.g0[1] / self.g0[0],
+                self.g0[2] / self.g0[0],
+                self.g0[3] / self.g0[0],
+            ]
+            .into(),
         }
     }
 }
@@ -115,7 +106,9 @@ impl pga3::Scalar {
 
 impl pga3::Point {
     pub fn new(x: f32, y: f32, z: f32) -> Self {
-        Self { g0: [x, y, z, 1.0].into() }
+        Self {
+            g0: [x, y, z, 1.0].into(),
+        }
     }
 }
 
@@ -269,3 +262,7 @@ pub trait Powf {
 pub fn sqrt<T: Powf>(n: T) -> T::Output {
     n.powf(0.5)
 }
+
+// pub fn unitize<T: Powf>(n: T) -> T::Output {
+//     n.powf(0.5)
+// }
