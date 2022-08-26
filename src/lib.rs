@@ -120,6 +120,12 @@ impl pga3::Point {
 }
 
 impl pga3::Dir {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self {
+            g0: [x, y, z].into(),
+        }
+    }
+
     pub fn point(self) -> pga3::Point {
         pga3::Point {
             g0: [self.g0[0], self.g0[1], self.g0[2], 1.0].into(),
