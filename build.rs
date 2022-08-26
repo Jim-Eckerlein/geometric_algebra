@@ -1,14 +1,7 @@
-#![allow(unused)]
-
-use std::env;
 use std::error::Error;
-use std::fs;
-use std::path::Path;
 use std::process::Command;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let out_dir = env::var_os("OUT_DIR").unwrap();
-
     Command::new("cargo")
         .current_dir("./codegen")
         .arg("run")
