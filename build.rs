@@ -8,7 +8,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg("--")
         .arg(concat!(
             "pga3:0,1,1,1;",
-            "MultiVector:1,e23,-e13,e12|e0,-e023,e013,-e012|e123,e1,e2,e3|e0123,e01,e02,e03;",
             "Scalar:1;",
             "Plane:e1,e2,e3,e0;",
             "Flat:e1,e2,e3;",
