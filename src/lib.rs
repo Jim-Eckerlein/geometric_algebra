@@ -112,7 +112,7 @@ impl pga3::Point {
     }
 }
 
-/// Projects a direction onto the unit sphere.
+/// Computes the point that lies on the unit sphere in the given direction.
 impl std::convert::From<pga3::Dir> for pga3::Point {
     fn from(d: pga3::Dir) -> Self {
         Self {
