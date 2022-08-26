@@ -110,21 +110,19 @@ impl pga3::Point {
             g0: [x, y, z, 1.0].into(),
         }
     }
-}
 
-impl std::convert::From<pga3::Dir> for pga3::Point {
-    fn from(d: pga3::Dir) -> Self {
-        Self {
-            g0: [d.g0[0], d.g0[1], d.g0[2], 1.0].into(),
+    pub fn dir(self) -> pga3::Dir {
+        let p = self / self.magnitude();
+        pga3::Dir {
+            g0: [p.g0[0], p.g0[1], p.g0[2]].into(),
         }
     }
 }
 
-impl std::convert::From<pga3::Point> for pga3::Dir {
-    fn from(p: pga3::Point) -> Self {
-        let p = p / p.magnitude();
-        Self {
-            g0: [p.g0[0], p.g0[1], p.g0[2]].into(),
+impl pga3::Dir {
+    pub fn point(self) -> pga3::Point {
+        pga3::Point {
+            g0: [self.g0[0], self.g0[1], self.g0[2], 1.0].into(),
         }
     }
 }
