@@ -8,15 +8,19 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg("--")
         .arg(concat!(
             "pga3:0,1,1,1;",
-            "Scalar:1;",
             "MultiVector:1,e23,-e13,e12|e0,-e023,e013,-e012|e123,e1,e2,e3|e0123,e01,e02,e03;",
-            "Rotor:1,e23,-e13,e12;",
-            "Point:-e023,e013,-e012,e123;",
+            "Scalar:1;",
             "Plane:e1,e2,e3,e0;",
+            "Flat:e1,e2,e3;",
             "Line:e01,e02,e03|e23,-e13,e12;",
+            "Branch:e01,e02,e03;",
+            "IdealLine:e23,-e13,e12;",
+            "Point:-e023,e013,-e012,e123;",
+            "Dir:-e023,e013,-e012;",
+            "Pseudoscalar:e0123;",
             "Translator:1,e01,e02,e03;",
-            "Motor:1,e23,-e13,e12|e0123,e01,e02,e03;",
-            "Branch:e01,e02,e03",
+            "Rotor:1,e23,-e13,e12;",
+            "Motor:1,e23,-e13,e12|e0123,e01,e02,e03",
         ))
         .spawn()?;
 

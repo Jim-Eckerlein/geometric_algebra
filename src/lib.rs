@@ -112,6 +112,15 @@ impl pga3::Point {
     }
 }
 
+/// Projects a direction onto the unit sphere.
+impl std::convert::From<pga3::Dir> for pga3::Point {
+    fn from(d: pga3::Dir) -> Self {
+        Self {
+            g0: [d.g0[0], d.g0[1], d.g0[2], 1.0].into(),
+        }
+    }
+}
+
 /// All elements set to `0.0`
 pub trait Zero {
     fn zero() -> Self;
