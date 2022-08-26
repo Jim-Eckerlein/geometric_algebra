@@ -112,11 +112,19 @@ impl pga3::Point {
     }
 }
 
-/// Computes the point that lies on the unit sphere in the given direction.
 impl std::convert::From<pga3::Dir> for pga3::Point {
     fn from(d: pga3::Dir) -> Self {
         Self {
             g0: [d.g0[0], d.g0[1], d.g0[2], 1.0].into(),
+        }
+    }
+}
+
+impl std::convert::From<pga3::Point> for pga3::Dir {
+    fn from(p: pga3::Point) -> Self {
+        let p = p / p.magnitude();
+        Self {
+            g0: [p.g0[0], p.g0[1], p.g0[2]].into(),
         }
     }
 }
