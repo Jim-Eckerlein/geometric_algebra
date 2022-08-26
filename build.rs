@@ -20,7 +20,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             "Pseudoscalar:e0123;",
             "Translator:1,e01,e02,e03;",
             "Rotor:1,e23,-e13,e12;",
-            "Motor:1,e23,-e13,e12|e0123,e01,e02,e03",
+            "Motor:1,e23,-e13,e12|e0123,e01,e02,e03;",
+            "Flector:e0,e1,e2,e3|-e023,e013,-e012,e123",
         ))
         .spawn()?;
 
