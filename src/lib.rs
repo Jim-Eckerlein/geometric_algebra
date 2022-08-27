@@ -131,6 +131,10 @@ impl pga3::Dir {
             g0: [self.g0[0], self.g0[1], self.g0[2], 1.0].into(),
         }
     }
+
+    pub fn length(self) -> pga3::Scalar {
+        self.dual().magnitude()
+    }
 }
 
 /// All elements set to `0.0`
