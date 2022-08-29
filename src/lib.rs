@@ -145,6 +145,32 @@ impl Powf for pga3::Rotor {
     }
 }
 
+impl Exp for pga3::Scalar {
+    type Output = pga3::Scalar;
+
+    fn exp(self) -> pga3::Scalar {
+        pga3::Scalar { g0: self.g0.exp() }
+    }
+}
+
+impl Ln for pga3::Scalar {
+    type Output = pga3::Scalar;
+
+    fn ln(self) -> pga3::Scalar {
+        pga3::Scalar { g0: self.g0.ln() }
+    }
+}
+
+impl Powf for pga3::Scalar {
+    type Output = Self;
+
+    fn powf(self, exponent: f32) -> Self {
+        pga3::Scalar {
+            g0: self.g0.powf(exponent),
+        }
+    }
+}
+
 impl pga3::Scalar {
     pub fn new(x: f32) -> Self {
         Self { g0: x }
