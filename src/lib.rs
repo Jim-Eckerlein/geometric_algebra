@@ -240,6 +240,18 @@ where
     v.dual().magnitude()
 }
 
+/// Projects `source` into `target`.
+pub fn project<T, P: Copy, K>(vector: T, target: P) -> T
+where
+    T: LeftContraction<P, Output = K>,
+    P: Inverse<Output = P>,
+    K: LeftContraction<P, Output = T>,
+{
+    vector
+        .left_contraction(target.inverse())
+        .left_contraction(target)
+}
+
 /// Generates a motion from `source` to `target`.
 pub fn motion<T: Copy, M, S>(source: T, target: T) -> M
 where
