@@ -392,7 +392,3 @@ pub trait Powf {
 pub fn sqrt<T: Powf>(n: T) -> T::Output {
     n.powf(0.5)
 }
-
-// pub fn unitize<T: Powf>(n: T) -> T::Output {
-//     n.powf(0.5)
-// }
