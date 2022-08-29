@@ -229,6 +229,17 @@ impl pga3::Rotor {
     }
 }
 
+/// Length of ideal part as scalar.
+///
+/// Also called ideal norm.
+pub fn ideal_magnitude<T, S>(v: T) -> S
+where
+    T: Dual<Output = T>,
+    T: Magnitude<Output = S>,
+{
+    v.dual().magnitude()
+}
+
 /// Generates a motion from `source` to `target`.
 pub fn motion<T: Copy, M, S>(source: T, target: T) -> M
 where
