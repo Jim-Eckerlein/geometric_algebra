@@ -65,7 +65,7 @@ impl Powf for pga3::Motor {
     }
 }
 
-impl Exp for pga3::Branch {
+impl Exp for pga3::IdealLine {
     type Output = pga3::Translator;
 
     fn exp(self) -> pga3::Translator {
@@ -76,10 +76,10 @@ impl Exp for pga3::Branch {
 }
 
 impl Ln for pga3::Translator {
-    type Output = pga3::Branch;
+    type Output = pga3::IdealLine;
 
-    fn ln(self) -> pga3::Branch {
-        pga3::Branch {
+    fn ln(self) -> pga3::IdealLine {
+        pga3::IdealLine {
             g0: [
                 self.g0[1] / self.g0[0],
                 self.g0[2] / self.g0[0],
