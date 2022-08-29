@@ -156,6 +156,19 @@ impl pga3::Rotor {
     }
 }
 
+/// Generates a motion from `source` to `target`.
+pub fn motion<T: Copy, M>(source: T, target: T) -> M
+where
+    T: Magnitude<Output = pga3::Scalar> + std::ops::Div<pga3::Scalar, Output = T>,
+    T: std::ops::Mul<T, Output = M>,
+    M: Powf<Output = M>,
+{
+    let source = source / source.magnitude();
+    let target = target / target.magnitude();
+    let squared_motion = target * source;
+    sqrt(squared_motion)
+}
+
 /// All elements set to `0.0`
 pub trait Zero {
     fn zero() -> Self;
