@@ -98,6 +98,53 @@ impl Powf for pga3::Translator {
     }
 }
 
+impl Exp for pga3::Branch {
+    type Output = pga3::Rotor;
+
+    fn exp(self) -> pga3::Rotor {
+        let n = self.magnitude().g0;
+        let imag = n.sin() / n;
+        if n == 0.0 {
+            pga3::Rotor::one()
+        } else {
+            pga3::Rotor {
+                g0: [
+                    n.cos(),
+                    imag * self.g0[0],
+                    imag * self.g0[1],
+                    imag * self.g0[2],
+                ]
+                .into(),
+            }
+        }
+    }
+}
+
+impl Ln for pga3::Rotor {
+    type Output = pga3::Branch;
+
+    fn ln(self) -> pga3::Branch {
+        let n = self.magnitude().g0;
+        if n == 0.0 {
+            pga3::Branch::zero()
+        } else {
+            let angle = (self.g0[0] / n).acos();
+            let real = angle / angle.sin() / n;
+            pga3::Branch {
+                g0: [real * self.g0[1], real * self.g0[2], real * self.g0[3]].into(),
+            }
+        }
+    }
+}
+
+impl Powf for pga3::Rotor {
+    type Output = Self;
+
+    fn powf(self, exponent: f32) -> Self {
+        (pga3::Scalar { g0: exponent } * self.ln()).exp()
+    }
+}
+
 impl pga3::Scalar {
     pub fn new(x: f32) -> Self {
         Self { g0: x }
