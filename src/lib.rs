@@ -242,6 +242,7 @@ where
     sqrt(squared_motion)
 }
 
+/// Linearly interpolate from `source` to `target`.
 pub fn lerp<M: Copy>(source: M, target: M, interpolant: f32) -> M
 where
     M: Reversal<Output = M>,
