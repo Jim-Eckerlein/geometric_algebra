@@ -141,6 +141,21 @@ impl pga3::Dir {
     }
 }
 
+impl pga3::Rotor {
+    pub fn from_angle_axis(angle: f32, axis: pga3::Dir) -> Self {
+        let sine = (angle * 0.5).sin();
+        Self {
+            g0: [
+                (0.5 * angle).cos(),
+                sine * axis.g0[0],
+                sine * axis.g0[1],
+                sine * axis.g0[2],
+            ]
+            .into(),
+        }
+    }
+}
+
 /// All elements set to `0.0`
 pub trait Zero {
     fn zero() -> Self;
