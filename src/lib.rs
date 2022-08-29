@@ -236,10 +236,7 @@ where
     T: std::ops::Mul<Output = M>,
     M: Powf<Output = M>,
 {
-    let source = source / source.magnitude();
-    let target = target / target.magnitude();
-    let squared_motion = target * source;
-    sqrt(squared_motion)
+    sqrt((target / target.magnitude()) * (source / source.magnitude()))
 }
 
 /// Linearly interpolate from `source` to `target`.
