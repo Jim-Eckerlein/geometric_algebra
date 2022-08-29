@@ -242,6 +242,15 @@ where
     sqrt(squared_motion)
 }
 
+pub fn lerp<M: Copy>(source: M, target: M, interpolant: f32) -> M
+where
+    M: Reversal<Output = M>,
+    M: std::ops::Mul<Output = M>,
+    M: Powf<Output = M>,
+{
+    (target * source.reversal()).powf(interpolant) * source
+}
+
 /// All elements set to `0.0`
 pub trait Zero {
     fn zero() -> Self;
