@@ -184,6 +184,12 @@ impl pga3::Point {
         }
     }
 
+    pub fn origin() -> Self {
+        Self {
+            g0: [0.0, 0.0, 0.0, 1.0].into(),
+        }
+    }
+
     pub fn dir(self) -> pga3::Dir {
         let p = self / self.magnitude();
         pga3::Dir {
