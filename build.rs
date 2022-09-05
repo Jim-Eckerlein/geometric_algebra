@@ -15,6 +15,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             "IdealLine:e01,e02,e03;",
             "Branch:e23,-e13,e12;",
             "Point:-e023,e013,-e012,e123;",
+            "Origin:e123;",
             "Dir:-e023,e013,-e012;",
             "Pseudoscalar:e0123;",
             "Translator:1,e01,e02,e03;",

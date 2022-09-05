@@ -198,6 +198,12 @@ impl pga3::Point {
     }
 }
 
+impl pga3::Origin {
+    pub fn new() -> Self {
+        Self { g0: 1.0 }
+    }
+}
+
 impl pga3::Dir {
     pub fn new(x: f32, y: f32, z: f32) -> Self {
         Self {
@@ -261,7 +267,6 @@ where
 {
     (a.regressive_product(b)).magnitude() / (a.magnitude() * b.magnitude())
 }
-
 
 /// Length of ideal part as scalar.
 ///
