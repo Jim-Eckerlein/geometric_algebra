@@ -248,6 +248,19 @@ impl pga3::Translator {
             g0: [1.0, -x / 2.0, -y / 2.0, -z / 2.0].into(),
         }
     }
+
+    /// Converts a translator to a 4x4 matrix for WebGPU.
+    pub fn matrix(&self) -> [pga3::Point; 4] {
+        let row = |index: usize| {
+            let mut point = pga3::Point::zero();
+            point.g0[index] = 1.0;
+            let row = self.transformation(point);
+            pga3::Point {
+                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+            }
+        };
+        [row(1), row(2), row(3), row(0)]
+    }
 }
 
 impl pga3::Rotor {
@@ -262,6 +275,34 @@ impl pga3::Rotor {
             ]
             .into(),
         }
+    }
+
+    /// Converts a rotor to a 4x4 matrix for WebGPU.
+    pub fn matrix(&self) -> [pga3::Point; 4] {
+        let row = |index: usize| {
+            let mut point = pga3::Point::zero();
+            point.g0[index] = 1.0;
+            let row = self.transformation(point);
+            pga3::Point {
+                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+            }
+        };
+        [row(1), row(2), row(3), row(0)]
+    }
+}
+
+impl pga3::Motor {
+    /// Converts a motor to a 4x4 matrix for WebGPU.
+    pub fn matrix(&self) -> [pga3::Point; 4] {
+        let row = |index: usize| {
+            let mut point = pga3::Point::zero();
+            point.g0[index] = 1.0;
+            let row = self.transformation(point);
+            pga3::Point {
+                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+            }
+        };
+        [row(1), row(2), row(3), row(0)]
     }
 }
 
