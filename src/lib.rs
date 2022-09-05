@@ -251,6 +251,18 @@ impl pga3::Rotor {
     }
 }
 
+/// Distance between two geometric objects
+pub fn distance<T, P, R, S>(a: T, b: P) -> S
+where
+    T: Copy + Magnitude<Output = S> + RegressiveProduct<P, Output = R>,
+    P: Copy + Magnitude<Output = S>,
+    R: Magnitude<Output = S>,
+    S: std::ops::Mul<S, Output = S> + std::ops::Div<S, Output = S>,
+{
+    (a.regressive_product(b)).magnitude() / (a.magnitude() * b.magnitude())
+}
+
+
 /// Length of ideal part as scalar.
 ///
 /// Also called ideal norm.
