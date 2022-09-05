@@ -220,6 +220,22 @@ impl pga3::Dir {
     }
 }
 
+impl pga3::Plane {
+    pub fn new(x: f32, y: f32, z: f32, distance: f32) -> Self {
+        Self {
+            g0: [x, y, z, -distance].into(),
+        }
+    }
+}
+
+impl pga3::Flat {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self {
+            g0: [x, y, z].into(),
+        }
+    }
+}
+
 impl pga3::Rotor {
     pub fn from_angle_axis(angle: f32, axis: pga3::Dir) -> Self {
         let sine = (angle * 0.5).sin();
