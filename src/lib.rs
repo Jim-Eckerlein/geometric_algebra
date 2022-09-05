@@ -242,6 +242,14 @@ impl pga3::Flat {
     }
 }
 
+impl pga3::Translator {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self {
+            g0: [1.0, -x / 2.0, -y / 2.0, -z / 2.0].into(),
+        }
+    }
+}
+
 impl pga3::Rotor {
     pub fn from_angle_axis(angle: f32, axis: pga3::Dir) -> Self {
         let sine = (angle * 0.5).sin();
