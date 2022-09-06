@@ -103,10 +103,10 @@ impl Exp for pga3::Branch {
 
     fn exp(self) -> pga3::Rotor {
         let n = self.magnitude().g0;
-        let imag = n.sin() / n;
         if n == 0.0 {
             pga3::Rotor::one()
         } else {
+            let imag = n.sin() / n;
             pga3::Rotor {
                 g0: [
                     n.cos(),
@@ -125,7 +125,7 @@ impl Ln for pga3::Rotor {
 
     fn ln(self) -> pga3::Branch {
         let n = self.magnitude().g0;
-        if n == 0.0 || (n == 1.0 && self.g0[0] == 1.0) {
+        if n == 0.0 {
             pga3::Branch::zero()
         } else {
             let angle = (self.g0[0] / n).acos();
@@ -141,7 +141,21 @@ impl Powf for pga3::Rotor {
     type Output = Self;
 
     fn powf(self, exponent: f32) -> Self {
-        (pga3::Scalar { g0: exponent } * self.ln()).exp()
+        if self.g0[1] == 0.0 && self.g0[2] == 0.0 && self.g0[3] == 0.0 {
+            // Rotor is a scalar and thus has no logarithm.
+            // Exponentiate just the scalar.
+            Self {
+                g0: [
+                    pga3::Scalar { g0: self.g0[0] }.powf(exponent).g0,
+                    0.0,
+                    0.0,
+                    0.0,
+                ]
+                .into(),
+            }
+        } else {
+            (pga3::Scalar { g0: exponent } * self.ln()).exp()
+        }
     }
 }
 
