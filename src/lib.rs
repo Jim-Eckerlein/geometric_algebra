@@ -125,7 +125,7 @@ impl Ln for pga3::Rotor {
 
     fn ln(self) -> pga3::Branch {
         let n = self.magnitude().g0;
-        if n == 0.0 {
+        if n == 0.0 || (n == 1.0 && self.g0[0] == 1.0) {
             pga3::Branch::zero()
         } else {
             let angle = (self.g0[0] / n).acos();
