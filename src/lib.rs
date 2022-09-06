@@ -155,15 +155,6 @@ impl ScalarPart for pga3::Rotor {
     }
 }
 
-/// Constrain the motor to traverse the shortest arc.
-pub fn constrain<M: Copy + ScalarPart + std::ops::Neg<Output = M>>(motor: M) -> M {
-    if motor.scalar_part() >= 0.0 {
-        motor
-    } else {
-        -motor
-    }
-}
-
 impl Powf for pga3::Rotor {
     type Output = Self;
 
@@ -388,7 +379,9 @@ where
     T: std::ops::Mul<Output = M>,
     M: Copy + ScalarPart + std::ops::Neg<Output = M> + Powf<Output = M>,
 {
-    constrain((target / target.magnitude()) * (source / source.magnitude())).sqrt()
+    ((target / target.magnitude()) * (source / source.magnitude()))
+        .constrain()
+        .sqrt()
 }
 
 /// Interpolate from `source` to `target`.
@@ -399,7 +392,7 @@ where
     M: Powf<Output = M>,
     M: Copy + ScalarPart + std::ops::Neg<Output = M>,
 {
-    constrain(target * source.reversal()).powf(interpolant) * source
+    (target * source.reversal()).constrain().powf(interpolant) * source
 }
 
 /// All elements set to `0.0`
@@ -556,6 +549,18 @@ where
 }
 
 /// Extracts the scalar part of a multivector.
-pub trait ScalarPart {
+pub trait ScalarPart
+where
+    Self: Copy + std::ops::Neg<Output = Self>,
+{
     fn scalar_part(self) -> f32;
+
+    /// Constrain the motion to traverse the shortest arc.
+    fn constrain(self) -> Self {
+        if self.scalar_part() >= 0.0 {
+            self
+        } else {
+            -self
+        }
+    }
 }
