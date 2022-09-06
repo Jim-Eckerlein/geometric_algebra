@@ -65,6 +65,12 @@ impl Powf for pga3::Motor {
     }
 }
 
+impl ScalarPart for pga3::Motor {
+    fn scalar_part(self) -> f32 {
+        self.g0[0]
+    }
+}
+
 impl Exp for pga3::IdealLine {
     type Output = pga3::Translator;
 
@@ -95,6 +101,12 @@ impl Powf for pga3::Translator {
 
     fn powf(self, exponent: f32) -> Self {
         (pga3::Scalar { g0: exponent } * self.ln()).exp()
+    }
+}
+
+impl ScalarPart for pga3::Translator {
+    fn scalar_part(self) -> f32 {
+        self.g0[0]
     }
 }
 
@@ -134,6 +146,21 @@ impl Ln for pga3::Rotor {
                 g0: [real * self.g0[1], real * self.g0[2], real * self.g0[3]].into(),
             }
         }
+    }
+}
+
+impl ScalarPart for pga3::Rotor {
+    fn scalar_part(self) -> f32 {
+        self.g0[0]
+    }
+}
+
+/// Constrain the motor to traverse the shortest arc.
+pub fn constrain<M: Copy + ScalarPart + std::ops::Neg<Output = M>>(motor: M) -> M {
+    if motor.scalar_part() >= 0.0 {
+        motor
+    } else {
+        -motor
     }
 }
 
@@ -359,19 +386,20 @@ pub fn motion<T: Copy, M, S>(source: T, target: T) -> M
 where
     T: Magnitude<Output = S> + std::ops::Div<S, Output = T>,
     T: std::ops::Mul<Output = M>,
-    M: Powf<Output = M>,
+    M: Copy + ScalarPart + std::ops::Neg<Output = M> + Powf<Output = M>,
 {
-    ((target / target.magnitude()) * (source / source.magnitude())).sqrt()
+    constrain((target / target.magnitude()) * (source / source.magnitude())).sqrt()
 }
 
-/// Linearly interpolate from `source` to `target`.
+/// Interpolate from `source` to `target`.
 pub fn lerp<M: Copy>(source: M, target: M, interpolant: f32) -> M
 where
     M: Reversal<Output = M>,
     M: std::ops::Mul<Output = M>,
     M: Powf<Output = M>,
+    M: Copy + ScalarPart + std::ops::Neg<Output = M>,
 {
-    (target * source.reversal()).powf(interpolant) * source
+    constrain(target * source.reversal()).powf(interpolant) * source
 }
 
 /// All elements set to `0.0`
@@ -525,4 +553,9 @@ where
     fn sqrt(self) -> Self::Output {
         self.powf(0.5)
     }
+}
+
+/// Extracts the scalar part of a multivector.
+pub trait ScalarPart {
+    fn scalar_part(self) -> f32;
 }
