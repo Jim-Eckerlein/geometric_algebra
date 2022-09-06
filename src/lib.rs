@@ -361,7 +361,7 @@ where
     T: std::ops::Mul<Output = M>,
     M: Powf<Output = M>,
 {
-    sqrt((target / target.magnitude()) * (source / source.magnitude()))
+    ((target / target.magnitude()) * (source / source.magnitude())).sqrt()
 }
 
 /// Linearly interpolate from `source` to `target`.
@@ -515,12 +515,14 @@ pub trait Powi {
 }
 
 /// Raises a number to an floating point scalar power
-pub trait Powf {
+pub trait Powf
+where
+    Self: std::marker::Sized,
+{
     type Output;
     fn powf(self, exponent: f32) -> Self::Output;
-}
 
-/// Extracts the square root of a number
-pub fn sqrt<T: Powf>(n: T) -> T::Output {
-    n.powf(0.5)
+    fn sqrt(self) -> Self::Output {
+        self.powf(0.5)
+    }
 }
