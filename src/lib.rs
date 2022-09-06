@@ -256,10 +256,10 @@ impl pga3::Translator {
             point.g0[index] = 1.0;
             let row = self.transformation(point);
             pga3::Point {
-                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+                g0: [row.g0[0], row.g0[1], row.g0[2], row.g0[3]].into(),
             }
         };
-        [row(1), row(2), row(3), row(0)]
+        [row(0), row(1), row(2), row(3)]
     }
 }
 
@@ -284,10 +284,10 @@ impl pga3::Rotor {
             point.g0[index] = 1.0;
             let row = self.transformation(point);
             pga3::Point {
-                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+                g0: [row.g0[0], row.g0[1], row.g0[2], row.g0[3]].into(),
             }
         };
-        [row(1), row(2), row(3), row(0)]
+        [row(0), row(1), row(2), row(3)]
     }
 }
 
@@ -299,10 +299,10 @@ impl pga3::Motor {
             point.g0[index] = 1.0;
             let row = self.transformation(point);
             pga3::Point {
-                g0: [row.g0[1], row.g0[2], row.g0[3], row.g0[0]].into(),
+                g0: [row.g0[0], row.g0[1], row.g0[2], row.g0[3]].into(),
             }
         };
-        [row(1), row(2), row(3), row(0)]
+        [row(0), row(1), row(2), row(3)]
     }
 }
 
