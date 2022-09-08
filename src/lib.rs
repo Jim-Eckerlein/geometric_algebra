@@ -378,14 +378,14 @@ where
         .left_contraction(target)
 }
 
-/// Generates a motion from `source` to `target`.
-pub fn motion<T: Copy, M, S>(source: T, target: T) -> M
+/// Generates a motion from `a` to `b`.
+pub fn motion<A, B, M, S>(a: A, b: B) -> M
 where
-    T: Magnitude<Output = S> + std::ops::Div<S, Output = T>,
-    T: std::ops::Mul<Output = M>,
+    A: Copy + Magnitude<Output = S> + std::ops::Div<S, Output = A>,
+    B: Copy + Magnitude<Output = S> + std::ops::Div<S, Output = B> + std::ops::Mul<A, Output = M>,
     M: Copy + ScalarPart + std::ops::Neg<Output = M> + Powf<Output = M>,
 {
-    ((target / target.magnitude()) * (source / source.magnitude()))
+    ((b / b.magnitude()) * (a / a.magnitude()))
         .constrain()
         .sqrt()
 }
