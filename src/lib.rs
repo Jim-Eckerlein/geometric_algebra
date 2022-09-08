@@ -391,7 +391,7 @@ where
 }
 
 /// Interpolate from `source` to `target`.
-pub fn lerp<M: Copy>(source: M, target: M, interpolant: f32) -> M
+pub fn interpolate<M: Copy>(source: M, target: M, interpolant: f32) -> M
 where
     M: Reversal<Output = M>,
     M: std::ops::Mul<Output = M>,
