@@ -264,6 +264,14 @@ impl pga3::Dir {
     }
 }
 
+impl pga3::Branch {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Self {
+            g0: [x, y, z].into(),
+        }
+    }
+}
+
 impl pga3::Plane {
     pub fn new(x: f32, y: f32, z: f32, distance: f32) -> Self {
         Self {
