@@ -374,16 +374,24 @@ where
     v.dual().magnitude()
 }
 
-/// Projects `source` into `target`.
-pub fn project<T, P: Copy, K>(vector: T, target: P) -> T
+/// Projects `a` into `b`.
+pub fn project<A, B, I>(a: A, b: B) -> A
 where
-    T: LeftContraction<P, Output = K>,
-    P: Inverse<Output = P>,
-    K: LeftContraction<P, Output = T>,
+    A: RightContraction<B, Output = I>,
+    B: Copy + Inverse<Output = B>,
+    I: OuterProduct<B, Output = A>,
 {
-    vector
-        .left_contraction(target.inverse())
-        .left_contraction(target)
+    a.right_contraction(b.inverse()).outer_product(b)
+}
+
+/// Antiprojects `a` onto `b`.
+pub fn anti_project<A, B, I>(a: A, b: B) -> A
+where
+    A: LeftContraction<B, Output = I>,
+    B: Copy + Inverse<Output = B>,
+    I: LeftContraction<B, Output = A>,
+{
+    a.left_contraction(b.inverse()).left_contraction(b)
 }
 
 /// Generates a motion from `a` to `b`.
