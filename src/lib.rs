@@ -381,21 +381,21 @@ where
 }
 
 /// Projects `a` into `b`.
-pub fn project<A, B, I>(a: A, b: B) -> A
+pub fn project<A, B, I, C>(a: A, b: B) -> C
 where
     A: RightContraction<B, Output = I>,
     B: Copy + Inverse<Output = B>,
-    I: OuterProduct<B, Output = A>,
+    I: OuterProduct<B, Output = C>,
 {
     a.right_contraction(b.inverse()).outer_product(b)
 }
 
 /// Antiprojects `a` onto `b`.
-pub fn anti_project<A, B, I>(a: A, b: B) -> A
+pub fn anti_project<A, B, I, C>(a: A, b: B) -> C
 where
     A: LeftContraction<B, Output = I>,
     B: Copy + Inverse<Output = B>,
-    I: LeftContraction<B, Output = A>,
+    I: LeftContraction<B, Output = C>,
 {
     a.left_contraction(b.inverse()).left_contraction(b)
 }
